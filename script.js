@@ -9,27 +9,62 @@ var centerY = 0;
 
 // var players
 var paddingX = 10;
-var paddingY = canvas.height/4;
-var offsetPlayer = 10;
+var paddingY = canvas.height/5;
+var offsetPlayer = paddingX*2 ;
 
 // var Player 1
 var x1 = offsetPlayer;
 var y1 = (canvas.height-paddingY)/2;
 
-var dy1 = 2;
-
 // var Player 2
 var x2 = canvas.width-(paddingX + offsetPlayer);
 var y2 = y1;
 
-var dy2 = 2;
+var upPressed = false;
+var downPressed = false;
+
+// var Ball
+var xBall = canvas.width/2;
+var yBall = canvas.height/2;
+var paddingBall =  15;
+
+var dxBall = 2;
+var dyBall = 2;
+
 
 // player 1 move
 document.addEventListener("mousemove", mouseMoveHandler);
+
 function mouseMoveHandler(e) {
   var relativeY = e.clientY;
   if(relativeY > 0 + paddingY/3 && relativeY < canvas.height - paddingY/3) {
     y1 = relativeY - paddingY/2;
+  }
+}
+
+// player 2 move
+document.addEventListener("keydown", keyDownHandler);
+document.addEventListener("keyup", keyUpHandler);
+
+function keyDownHandler(e) {
+  // keyCode correspond to a button of the laptop ex 39 => "right arrow"
+  if(e.keyCode == 38) {
+    upPressed = true;
+  }
+  // 37 => "left arrow"
+  else if(e.keyCode == 40) {
+    downPressed = true;
+  }
+}
+
+function keyUpHandler(e){
+  // keyCode correspond to a button of the laptop ex 39 => "right arrow"
+  if(e.keyCode == 38) {
+    upPressed = false;
+  }
+  // 37 => "left arrow"
+  else if(e.keyCode == 40) {
+    downPressed = false;
   }
 }
 
@@ -57,12 +92,38 @@ function drawPlayer2() {
   ctx.closePath();
 }
 
+function ball() {
+  ctx.beginPath();
+  ctx.arc(xBall, yBall, paddingBall, 0, Math.PI*2, false);
+  ctx.fillStyle = "white";
+  ctx.fill();
+  ctx.closePath();
+  }
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   Center();
   drawPlayer1();
   drawPlayer2();
+  ball();
+
+  xBall += dxBall;
+  yBall += dyBall;
+
+  if(yBall < paddingBall || yBall > canvas.height - paddingBall) {
+    dyBall = -dyBall
+  }
+  // if(xBall < paddingBall || xBall > canvas.height - paddingBall) {
+  //   dxBall = -dxBall
+  // }
+
+  if(upPressed && y2 > 0) {
+    y2 -= 7;
+  }
+  else if(downPressed && y2 < canvas.height - paddingY) {
+    y2 += 7;
+  }
 }
 
 setInterval(draw, 10);
