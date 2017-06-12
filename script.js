@@ -34,6 +34,8 @@ var dyBall = 2;
 var collision1 = x1 + paddingX + (paddingBall/2);
 var collision2 = x2 - (paddingBall/2);
 
+var score1 = 0
+var score2 = 0
 
 // player 1 move
 document.addEventListener("mousemove", mouseMoveHandler);
@@ -130,10 +132,35 @@ function collisionDetection() {
   }
 }
 
-function drawScore() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#0095DD";
-  ctx.fillText("Score: "+ collision2 + " and " + xBall, 0, 20);
+
+function player1Win() {
+  if(xBall == canvas.width) {
+    score1 ++;
+    xBall = collision2;
+    yBall = y2 + (paddingY/2);
+    dxBall = -dxBall
+  }
+}
+
+function player2Win() {
+  if(xBall == 0) {
+    score2 ++;
+    xBall = collision1;
+    yBall = y1 + (paddingY/2);
+    dxBall = -dxBall
+  }
+}
+
+function drawScore1() {
+  ctx.font = "50px Arial";
+  ctx.fillStyle = "gray";
+  ctx.fillText(score1, canvas.width/4, 50);
+}
+
+function drawScore2() {
+  ctx.font = "50px Arial";
+  ctx.fillStyle = "gray";
+  ctx.fillText(score2, (canvas.width*3)/4, 50);
 }
 
 function draw() {
@@ -145,7 +172,10 @@ function draw() {
   ball();
   ballMoving();
   collisionDetection();
-  drawScore();
+  player1Win();
+  player2Win();
+  drawScore1();
+  drawScore2();
 
   if(upPressed && y2 > 0) {
     y2 -= 7;
