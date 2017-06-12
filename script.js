@@ -26,10 +26,13 @@ var downPressed = false;
 // var Ball
 var xBall = canvas.width/2;
 var yBall = canvas.height/2;
-var paddingBall =  15;
+var paddingBall =  12;
 
 var dxBall = 2;
 var dyBall = 2;
+
+var collision1 = x1 + paddingX + (paddingBall/2);
+var collision2 = x2 - (paddingBall/2);
 
 
 // player 1 move
@@ -98,7 +101,40 @@ function ball() {
   ctx.fillStyle = "white";
   ctx.fill();
   ctx.closePath();
+}
+
+function ball() {
+  ctx.beginPath();
+  ctx.arc(xBall, yBall, paddingBall, 0, Math.PI*2, false);
+  ctx.fillStyle = "white";
+  ctx.fill();
+  ctx.closePath();
+}
+
+function ballMoving() {
+  xBall += dxBall;
+  yBall += dyBall;
+  if(yBall < paddingBall || yBall > canvas.height - paddingBall) {
+    dyBall = -dyBall;
   }
+}
+
+function collisionDetection() {
+  // collisionDetection player 2
+  if(yBall > y2 && yBall < y2 + paddingY && xBall == collision2) {
+    dxBall = -dxBall;
+  }
+  // collisionDetection player 1
+  if(yBall > y1 && yBall < y1 + paddingY && xBall == collision1) {
+    dxBall = -dxBall;
+  }
+}
+
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: "+ collision2 + " and " + xBall, 0, 20);
+}
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -107,16 +143,9 @@ function draw() {
   drawPlayer1();
   drawPlayer2();
   ball();
-
-  xBall += dxBall;
-  yBall += dyBall;
-
-  if(yBall < paddingBall || yBall > canvas.height - paddingBall) {
-    dyBall = -dyBall
-  }
-  // if(xBall < paddingBall || xBall > canvas.height - paddingBall) {
-  //   dxBall = -dxBall
-  // }
+  ballMoving();
+  collisionDetection();
+  drawScore();
 
   if(upPressed && y2 > 0) {
     y2 -= 7;
