@@ -10,15 +10,16 @@ var centerY = 0;
 // var players
 var paddingX = 10;
 var paddingY = canvas.height/4;
+var offsetPlayer = 10;
 
 // var Player 1
-var x1 = 0;
+var x1 = offsetPlayer;
 var y1 = (canvas.height-paddingY)/2;
 
 var dy1 = 2;
 
 // var Player 2
-var x2 = canvas.width-paddingX;
+var x2 = canvas.width-(paddingX + offsetPlayer);
 var y2 = y1;
 
 var dy2 = 2;
